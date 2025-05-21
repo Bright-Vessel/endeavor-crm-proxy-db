@@ -153,3 +153,7 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': 1 * 1 * 60,
     }
 }
+
+
+CSRF_TRUSTED_ORIGINS = ["https://crm-proxy.brightvessel.net"]
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 2500
