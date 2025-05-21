@@ -154,6 +154,10 @@ CELERY_BEAT_SCHEDULE = {
     'renew_childcarecrm_token': {
         'task': 'apps.proxy.tasks.renew_childcarecrm_token',
         'schedule': 1 * 1 * 60,
+    },
+    'sync_childcarecrm_slots': {
+        'task': 'apps.proxy.tasks.sync_childcarecrm_slots',
+        'schedule': 1 * 5 * 60,
     }
 }
 
