@@ -10,7 +10,7 @@ services:
       - .:/code
     ports:
       - "8000:8000"
-    command: bash -c "gunicorn --workers=4 --timeout=300 config.wsgi -b 0.0.0.0:8000"
+    command: bash -c "python manage.py runserver"
     restart: on-failure
     depends_on:
       - redis
