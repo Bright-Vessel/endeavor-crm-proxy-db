@@ -5,3 +5,4 @@ django-celery-beat
 celery[redis]
 requests
 djangorestframework
+gunicorn
