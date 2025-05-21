@@ -88,6 +88,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 if ON_PRODUCTION:
     DATABASE_URL = os.environ.get('DATABASE_URL')
     DATABASES = {'default': dj_database_url.config(default=DATABASE_URL)}
+    print(f"Using production DB: {DATABASE_URL}")
 else:
     DATABASES = {
         'default': {
@@ -95,7 +96,7 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-
+    print(f"Using local SQLite DB: {DATABASES['default']['NAME']}")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
