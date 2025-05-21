@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  web:
+    container_name: crmproxy-web
+    build: .
+    env_file:
+      - .env
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    command: bash -c "gunicorn --workers=4 --timeout=300 config.wsgi -b 0.0.0.0:8000"
+    restart: on-failure
+    depends_on:
+      - redis
+
+  celery:
+    container_name: crmproxy-celery-worker
+    build: .
+    command: celery -A config worker -l info --concurrency=4
+    volumes:
+      - .:/code
+    env_file:
+      - .env
+    restart: on-failure
+    depends_on:
+      - web
+      - redis
+
+  celery-beat:
+    container_name: crmproxy-celery-beat
+    build: .
+    command: celery -A config beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - .:/code
+    env_file:
+      - .env
+    restart: on-failure
+    depends_on:
+      - web
+      - redis
+
+  redis:
+    container_name: crmproxy-redis
+    image: redis:latest
+    restart: on-failure
+    ports:
+      - "6379:6379"

@@ -29,7 +29,7 @@ ON_PRODUCTION = os.environ.get('ON_PRODUCTION', False)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps.authentication',
     'apps.dashboard',
+    'apps.proxy',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -131,3 +133,23 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = 'dashboard/'
 LOGOUT_REDIRECT_URL = '/authentication/login/'
 LOGIN_URL = '/authentication/login/'
+
+# Remote CRM API Data
+
+CHILDCARECRM_USERNAME = os.getenv("CHILDCARECRM_USERNAME")
+CHILDCARECRM_PASSWORD = os.getenv("CHILDCARECRM_PASSWORD")
+CHILDCARECRM_BASE_URL = "https://api.childcarecrm.com"
+
+
+CELERY_BROKER_URL = os.environ.get('REDIS_URL', 'redis://127.0.0.1:6379')
+CELERY_RESULT_BACKEND = os.environ.get('REDIS_URL', 'redis://127.0.0.1:6379')
+
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERYD_MAX_TASKS_PER_CHILD = 1
+CELERY_BEAT_SCHEDULE = {
+    'renew_childcarecrm_token': {
+        'task': 'apps.proxy.tasks.renew_childcarecrm_token',
+        'schedule': 1 * 1 * 60,
+    }
+}

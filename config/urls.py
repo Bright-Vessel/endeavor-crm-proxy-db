@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('authentication/', include('apps.authentication.urls')),  # Routes for the dashboard app
     path('', include('apps.dashboard.urls')),  # Routes for the dashboard app
+    path('', include('apps.api.urls')),  # Routes for the dashboard app
 ]
